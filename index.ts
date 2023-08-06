@@ -22,7 +22,7 @@ class Draggable {
 		const mousePos = Input.CursorOnScreen
 
 		if ( Input.IsMouseKeyDown( VMouseKeys.MK_LBUTTON ) ) {
-			if ( InBounds( mousePos, this.position, this.size ) ) {
+			if ( InBounds( mousePos, this.position, this.size ) || this.isDragging ) {
 				if ( !this.isDragging ) {
 					this.offset.x = mousePos.x - this.position.x;
 					this.offset.y = mousePos.y - this.position.y;
@@ -40,7 +40,7 @@ class Draggable {
 
 const Drag = new Draggable( new Vector2( 100, 100 ), new Vector2( 200, 200 ) )
 EventsSDK.on( "Draw", ( ) => {
-	Drag.Update( );
-	
+	Drag.Update( )
+
 	RendererSDK.FilledRect( Drag.position, Drag.size, new Color( 255, 255, 255, 255 ) )
 } )
