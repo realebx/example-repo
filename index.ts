@@ -42,5 +42,5 @@ const Drag = new Draggable( new Vector2( 100, 100 ), new Vector2( 200, 200 ) )
 EventsSDK.on( "Draw", ( ) => {
 	Drag.Update( )
 
-	RendererSDK.Image( "panorama/images/spellicons/monkey_king_tree_dance_png.vtex_c", Drag.position, 0.0, Drag.size )
+	RendererSDK.Image( "panorama/images/spellicons/oracle_fortunes_end_png.vtex_c", Drag.position, 0.0, Drag.size )
 } )
