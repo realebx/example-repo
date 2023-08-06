@@ -6,24 +6,41 @@ const InBounds = ( source: Vector2, position: Vector2, size: Vector2 ) => {
 }
 
 class Draggable {
-	startPosition: Vector2;
+	position: Vector2;
 	size: Vector2;
 
 	isDragging: boolean = false;
 
-	constructor( startPosition: Vector2, size: Vector2 ) {
-		this.startPosition = startPosition;
+	offset: Vector2 = new Vector2( );
+
+	constructor( position: Vector2, size: Vector2 ) {
+		this.position = position;
 		this.size = size;
 	}
 
 	Update( ): void {
-		if ( !Input.IsMouseKeyDown( VMouseKeys.MK_LBUTTON ) )
-			this.isDragging = false;
+		const mousePos = Input.CursorOnScreen
+
+		if ( Input.IsMouseKeyDown( VMouseKeys.MK_LBUTTON ) ) {
+			if ( InBounds( mousePos, this.position, this.size ) ) {
+				if ( !this.isDragging ) {
+					this.offset.x = mousePos.x - this.position.x;
+					this.offset.y = mousePos.y - this.position.y;
+					this.isDragging = true
+				}
+
+				this.position.x = mousePos.x - this.offset.x;
+				this.position.y = mousePos.y - this.offset.y;
+			}
+		} else if ( this.isDragging ) {
+			this.isDragging = false
+		}
 	}
 }
 
+const Drag = new Draggable( new Vector2( 100, 100 ), new Vector2( 200, 200 ) )
 EventsSDK.on( "Draw", ( ) => {
-	const mousePos: Vector2 = Input.CursorOnScreen;
-	const color = InBounds( mousePos, new Vector2( 200, 200 ), new Vector2( 100, 100 ) ) ? new Color( 0, 255, 0, 255 ) : new Color( 255, 255, 255, 255 )
-	RendererSDK.FilledRect( new Vector2( 200, 200 ), new Vector2( 100, 100 ), color )
+	Drag.Update( );
+	
+	RendererSDK.FilledRect( Drag.position, Drag.size, new Color( 255, 255, 255, 255 ) )
 } )
